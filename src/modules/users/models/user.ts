@@ -1,8 +1,22 @@
+import { LoginType } from "./enums/login-type.enum";
+
 export class User {
   private name: string;
   private lastname: string;
+  private document: string;
   private phoneNumber: number;
+  private password: string;
+  private loginType: LoginType;
   private email: string;
+
+  constructor(document: string, name: string) {
+    this.document = document;
+    this.name = name;
+  }
+
+  static of(document: string, name: string): User {
+    return new User(document, name);
+  }
 
   getName(): string {
     return this.name;
@@ -18,6 +32,18 @@ export class User {
 
   getEmail(): string {
     return this.email;
+  }
+
+  getPassword(): string {
+    return this.password;
+  }
+
+  getLoginType(): LoginType {
+    return this.loginType;
+  }
+
+  getDocument(): string {
+    return this.document;
   }
 
   validate(): void {
