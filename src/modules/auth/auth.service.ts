@@ -1,8 +1,11 @@
-import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 
 import { UserService } from '../users/services/user.service';
 import { JwtService } from '@nestjs/jwt';
-import { User } from '../users/models/user';
+import { UserDto } from '../users/models/user.dto';
+
+import { compareSync } from 'bcrypt';
+import { NotFoundError } from 'rxjs';
 
 @Injectable()
 export class AuthService {
@@ -11,15 +14,29 @@ export class AuthService {
         private readonly jwtService: JwtService
     ) {}
 
-    async login(document: string, password: string): Promise<{ access_token: string }> {
-        const user = await this.userService.findUserByDocument(document);
-        if (user?.getPassword() !== password) {
-            throw new UnauthorizedException();
+    async login(user: any): Promise<{ access_token: string }> {
+       const payload = { sub: user.id, email: user.email, loginType: user.loginType };
+
+       return {
+            access_token: this.jwtService.sign(payload)
+       }
+    }
+
+    async validateUser(document: string, password: string) {
+        let user: UserDto;
+        try {
+            user = await this.userService.findUserByDocument(document);
+        } catch (error) {
+            return null;
         }
 
-        const userEncrypt = User.of(user.getDocument(), user.getName());
-        return {
-            access_token: await this.jwtService.signAsync(userEncrypt),
+        if (!user) {
+            throw new NotFoundException('Você não possui um cadastro na plataforma.')
         };
+
+        const isPasswordValid = password == user.password;
+        if (!isPasswordValid) return null;
+
+        return user;
     }
 }

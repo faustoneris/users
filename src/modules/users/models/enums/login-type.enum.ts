@@ -1,4 +1,4 @@
 export enum LoginType {
-    CLIENT,
-    PROVIDER,
+    CUSTOMER = 'CUSTOMER',
+    SUPPLIER = 'SUPPLIER',
   }

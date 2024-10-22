@@ -1,31 +1,53 @@
 import {
     Body,
     Controller,
+    Delete,
     Get,
+    HttpCode,
+    HttpStatus,
     Param,
-    Post
+    Post,
+    Put,
+    Res
   } from '@nestjs/common';
-import { User } from '../models/user';
+import { UserDto } from '../models/user.dto';
 import { UserService } from '../services/user.service';
+import { User } from '../models/schemas/user.schema';
+import { Response } from 'express';
 
 @Controller('users')
 export class UserController {
   constructor(
-    private readonly userAuthenticationService: UserService,
+    private readonly userService: UserService,
   ) {}
 
-  @Get('document')
-  async findUserByDocument(@Param('document') document: string): Promise<User> {
-    return;
+  @Get()
+  async findAllSuppliers(): Promise<UserDto[]> {
+    return await this.userService.findAllSupliers();
   }
 
-  @Post('create')
-  async createUser(@Body() user: User): Promise<User> {
-    return await this.userAuthenticationService.createUser(user);
+  @Get('document/:document')
+  async findUserByDocument(@Param('document') document: string): Promise<UserDto> {
+    return await this.userService.findUserByDocument(document);
   }
 
-  @Post('authentication')
-  async userAuthentication(@Body() user: any): Promise<any> {
-      return;
+  @Get('email/:email')
+  async findUserById(@Param('email') email: string): Promise<UserDto> {
+    return await this.userService.findUserByEmail(email);
+  }
+
+  @Post()
+  async createUser(@Body() user: UserDto): Promise<void> {
+    await this.userService.createUser(user);
+  }
+
+  @Put(':id')
+  async updateUser(@Param('id') id: string, @Body() user: User): Promise<boolean> {
+    return await this.userService.updateUser(id, user);
+  }
+
+  @Delete(':document')
+  async deleteUser(@Param('document') document: string): Promise<void> {
+    await this.userService.deleteUser(document);
   }
 }
