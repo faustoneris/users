@@ -14,7 +14,7 @@ import { PassportModule } from '@nestjs/passport';
       global: true,
       secret: "tcc",
       privateKey: '0Q60642EmnsDPibgZ1o5YH9gg0hWMowQAKQJ10UMXuU=',
-      signOptions: { expiresIn: '60s' },
+      signOptions: { expiresIn: '10s' },
     })
   ],
   controllers: [AuthController],
