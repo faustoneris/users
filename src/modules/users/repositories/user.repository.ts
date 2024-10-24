@@ -32,7 +32,7 @@ export class UserRepository {
       { _id: id },
       { $set: user }
     );
-    return updated.matchedCount > 0;
+    return updated.modifiedCount > 0;
   }
 
   async deleteUser(document: string): Promise<void> {

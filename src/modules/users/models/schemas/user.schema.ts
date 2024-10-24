@@ -10,6 +10,8 @@ export class User extends Document {
     @Prop()
     lastname: string;
     @Prop()
+    fantasyName: string;
+    @Prop()
     document: string;
     @Prop()
     phoneNumber: number;

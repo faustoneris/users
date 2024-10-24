@@ -49,7 +49,8 @@ export class UserService {
   }
 
   async updateUser(id: string, user: User): Promise<boolean> {
-    if (!id || !user) throw new Error('Usuário inválido');
+    if (!id) throw new BadGatewayException('Usuário inválido');
+    if (!user || Object.keys(user).length == 0) throw new BadGatewayException('Usuário inválido');
     try {
       return await this.userAuthenticationRepository.updateUser(id, user);
     } catch (error) {
