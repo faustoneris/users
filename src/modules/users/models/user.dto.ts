@@ -1,6 +1,7 @@
 import { LoginType } from "./enums/login-type.enum";
 
 export class UserDto {
+  _id: string;
   name: string;
   lastname?: string;
   fantasyName?: string;

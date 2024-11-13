@@ -12,11 +12,11 @@ export class UserRepository {
   constructor(@InjectModel(User.name) private userModel: Model<User>) {}
 
   async findUserByDocument(document: string): Promise<UserDto> {
-    return await this.userModel.findOne({ document });
+    return await this.userModel.findOne({ document: document });
   }
 
   async findUserByEmail(email: string): Promise<UserDto> {
-    return this.userModel.findOne({ email });
+    return this.userModel.findOne({ email: email });
   }
 
   async findAllSuppliers(): Promise<UserDto[]> {
@@ -30,7 +30,11 @@ export class UserRepository {
   async updateUser(id: string, user: User): Promise<boolean> {
     const updated = await this.userModel.updateOne(
       { _id: id },
-      { $set: user }
+      {
+        name: user.name,
+        phoneNumber: user.phoneNumber,
+        email: user.email
+       }
     );
     return updated.modifiedCount > 0;
   }
